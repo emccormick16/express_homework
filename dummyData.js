@@ -1,25 +1,166 @@
-const fs = require("fs");
-const { parse } = require("csv-parse");
+const data = [
+  {
+    Id: 1,
+    ActivityDate: "4/12/2016",
+    TotalSteps: "13162",
+    TotalDistance: "8.5",
+    TrackerDistance: "8.5",
+    LoggedActivitiesDistance: "0",
+    VeryActiveDistance: "1.87999999523163",
+    ModeratelyActiveDistance: "0.550000011920929",
+    LightActiveDistance: "6.05999994277954",
+    SedentaryActiveDistance: "0",
+    VeryActiveMinutes: "25",
+    FairlyActiveMinutes: "13",
+    LightlyActiveMinutes: "328",
+    SedentaryMinutes: "728",
+    Calories: "1985",
+  },
+  {
+    Id: 2,
+    ActivityDate: "4/13/2016",
+    TotalSteps: "10735",
+    TotalDistance: "6.96999979019165",
+    TrackerDistance: "6.96999979019165",
+    LoggedActivitiesDistance: "0",
+    VeryActiveDistance: "1.57000005245209",
+    ModeratelyActiveDistance: "0.689999997615814",
+    LightActiveDistance: "4.71000003814697",
+    SedentaryActiveDistance: "0",
+    VeryActiveMinutes: "21",
+    FairlyActiveMinutes: "19",
+    LightlyActiveMinutes: "217",
+    SedentaryMinutes: "776",
+    Calories: "1797",
+  },
+  {
+    Id: 3,
+    ActivityDate: "4/14/2016",
+    TotalSteps: "10460",
+    TotalDistance: "6.73999977111816",
+    TrackerDistance: "6.73999977111816",
+    LoggedActivitiesDistance: "0",
+    VeryActiveDistance: "2.44000005722046",
+    ModeratelyActiveDistance: "0.400000005960464",
+    LightActiveDistance: "3.91000008583069",
+    SedentaryActiveDistance: "0",
+    VeryActiveMinutes: "30",
+    FairlyActiveMinutes: "11",
+    LightlyActiveMinutes: "181",
+    SedentaryMinutes: "1218",
+    Calories: "1776",
+  },
+  {
+    Id: 4,
+    ActivityDate: "4/15/2016",
+    TotalSteps: "9762",
+    TotalDistance: "6.28000020980835",
+    TrackerDistance: "6.28000020980835",
+    LoggedActivitiesDistance: "0",
+    VeryActiveDistance: "2.14000010490417",
+    ModeratelyActiveDistance: "1.25999999046326",
+    LightActiveDistance: "2.82999992370605",
+    SedentaryActiveDistance: "0",
+    VeryActiveMinutes: "29",
+    FairlyActiveMinutes: "34",
+    LightlyActiveMinutes: "209",
+    SedentaryMinutes: "726",
+    Calories: "1745",
+  },
+  {
+    Id: 5,
+    ActivityDate: "4/16/2016",
+    TotalSteps: "12669",
+    TotalDistance: "8.15999984741211",
+    TrackerDistance: "8.15999984741211",
+    LoggedActivitiesDistance: "0",
+    VeryActiveDistance: "2.71000003814697",
+    ModeratelyActiveDistance: "0.409999996423721",
+    LightActiveDistance: "5.03999996185303",
+    SedentaryActiveDistance: "0",
+    VeryActiveMinutes: "36",
+    FairlyActiveMinutes: "10",
+    LightlyActiveMinutes: "221",
+    SedentaryMinutes: "773",
+    Calories: "1863",
+  },
+  {
+    Id: 6,
+    ActivityDate: "4/17/2016",
+    TotalSteps: "9705",
+    TotalDistance: "6.48000001907349",
+    TrackerDistance: "6.48000001907349",
+    LoggedActivitiesDistance: "0",
+    VeryActiveDistance: "3.19000005722046",
+    ModeratelyActiveDistance: "0.779999971389771",
+    LightActiveDistance: "2.50999999046326",
+    SedentaryActiveDistance: "0",
+    VeryActiveMinutes: "38",
+    FairlyActiveMinutes: "20",
+    LightlyActiveMinutes: "164",
+    SedentaryMinutes: "539",
+    Calories: "1728",
+  },
+  {
+    Id: 7,
+    ActivityDate: "4/18/2016",
+    TotalSteps: "13019",
+    TotalDistance: "8.59000015258789",
+    TrackerDistance: "8.59000015258789",
+    LoggedActivitiesDistance: "0",
+    VeryActiveDistance: "3.25",
+    ModeratelyActiveDistance: "0.639999985694885",
+    LightActiveDistance: "4.71000003814697",
+    SedentaryActiveDistance: "0",
+    VeryActiveMinutes: "42",
+    FairlyActiveMinutes: "16",
+    LightlyActiveMinutes: "233",
+    SedentaryMinutes: "1149",
+    Calories: "1921",
+  },
+  {
+    Id: 8,
+    ActivityDate: "4/19/2016",
+    TotalSteps: "15506",
+    TotalDistance: "9.88000011444092",
+    TrackerDistance: "9.88000011444092",
+    LoggedActivitiesDistance: "0",
+    VeryActiveDistance: "3.52999997138977",
+    ModeratelyActiveDistance: "1.32000005245209",
+    LightActiveDistance: "5.03000020980835",
+    SedentaryActiveDistance: "0",
+    VeryActiveMinutes: "50",
+    FairlyActiveMinutes: "31",
+    LightlyActiveMinutes: "264",
+    SedentaryMinutes: "775",
+    Calories: "2035",
+  },
+  {
+    Id: 9,
+    ActivityDate: "4/20/2016",
+    TotalSteps: "10544",
+    TotalDistance: "6.67999982833862",
+    TrackerDistance: "6.67999982833862",
+    LoggedActivitiesDistance: "0",
+    VeryActiveDistance: "1.96000003814697",
+    ModeratelyActiveDistance: "0.479999989271164",
+    LightActiveDistance: "4.23999977111816",
+    SedentaryActiveDistance: "0",
+    VeryActiveMinutes: "28",
+    FairlyActiveMinutes: "12",
+    LightlyActiveMinutes: "205",
+    SedentaryMinutes: "818",
+    Calories: "1786",
+  },
+];
 
-const data = [];
+const list = () => {
+  return [...data];
+};
 
-fs.createReadStream("./dailyActivity_merged.csv")
-  .pipe(
-    parse({
-      delimiter: ",",
-      columns: true,
-      ltrim: true,
-    })
-  )
-  .on("data", function (row) {
-    // 👇 push the object row into the array
-    data.push(row);
-  })
-  .on("error", function (error) {
-    console.log(error.message);
-  })
-  .on("end", function () {
-    // 👇 log the result array
-    console.log("parsed csv data:");
-    console.log(data);
-  });
+const find = (id) => {
+  const post = data.find((post) => post.Id === +id);
+  return { ...post };
+};
+
+module.exports = { list: list, find: find };
